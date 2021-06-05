@@ -17,11 +17,17 @@ except ImportError:
 ABS_PATH = os.path.dirname(os.path.realpath(__file__))
 HOSTS_DB = os.path.join(ABS_PATH, 'gpuhosts.db')
 SAFE_ZONE = False  # Safe to report all details.
+HOST_NAME = None
 
 
 def safe_zone(safe=False):
     global SAFE_ZONE
     SAFE_ZONE = safe
+
+
+def set_name(name=None):
+    global HOST_NAME
+    HOST_NAME = name
 
 
 def my_gpustat():
@@ -92,6 +98,8 @@ def all_gpustats():
     gpustats = []
     mystat = my_gpustat()
     if 'gpus' in mystat:
+        if HOST_NAME:
+            mystat['hostname'] = HOST_NAME
         gpustats.append(mystat)
 
     hosts = load_hosts()

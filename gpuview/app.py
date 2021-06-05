@@ -59,6 +59,7 @@ def main():
 
     if 'run' == args.action:
         core.safe_zone(args.safe_zone)
+        core.set_name(args.host_name)
         global EXCLUDE_SELF
         EXCLUDE_SELF = args.exclude_self
         app.run(host=args.host, port=args.port, debug=args.debug)

@@ -44,6 +44,8 @@ def arg_parser():
                              help="Report all details including usernames")
     base_parser.add_argument('--exclude-self', action='store_true',
                              help="Don't report to others but self-dashboard")
+    base_parser.add_argument('--host-name', default=None,
+                            help="An optional readable name for the GPU host itself")
 
     run_parser = subparsers.add_parser("run", parents=[base_parser],
                                        help="Run gpuview server")
