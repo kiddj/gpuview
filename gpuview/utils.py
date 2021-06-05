@@ -46,6 +46,8 @@ def arg_parser():
                              help="Don't report to others but self-dashboard")
     base_parser.add_argument('--host-name', default=None,
                             help="An optional readable name for the GPU host itself")
+    base_parser.add_argument('--passwd', default=None,
+                            help="User Password")
 
     run_parser = subparsers.add_parser("run", parents=[base_parser],
                                        help="Run gpuview server")

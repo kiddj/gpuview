@@ -26,7 +26,10 @@ EXCLUDE_SELF = False  # Do not report to `/gpustat` calls.
 
 
 @app.route('/')
-def index():
+def index(user_passwd):
+    passwd = core.get_passwd()
+    if passwd is not None and passwd != user_passwd:
+        return None
     gpustats = core.all_gpustats()
     now = datetime.now().strftime('Updated at %Y-%m-%d %H-%M-%S')
     return template('index', gpustats=gpustats, update_time=now)
@@ -60,6 +63,7 @@ def main():
     if 'run' == args.action:
         core.safe_zone(args.safe_zone)
         core.set_name(args.host_name)
+        core.set_passwd(args.passwd)
         global EXCLUDE_SELF
         EXCLUDE_SELF = args.exclude_self
         app.run(host=args.host, port=args.port, debug=args.debug)

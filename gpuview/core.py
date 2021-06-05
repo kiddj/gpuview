@@ -18,6 +18,7 @@ ABS_PATH = os.path.dirname(os.path.realpath(__file__))
 HOSTS_DB = os.path.join(ABS_PATH, 'gpuhosts.db')
 SAFE_ZONE = False  # Safe to report all details.
 HOST_NAME = None
+PASSWD = None
 
 
 def safe_zone(safe=False):
@@ -28,6 +29,15 @@ def safe_zone(safe=False):
 def set_name(name=None):
     global HOST_NAME
     HOST_NAME = name
+
+
+def set_passwd(passwd=None):
+    global PASSWD
+    PASSWD = passwd
+
+
+def get_passwd():
+    return PASSWD
 
 
 def my_gpustat():
@@ -100,27 +110,28 @@ def all_gpustats():
             mystat['hostname'] = HOST_NAME
         gpustats.append(mystat)
 
-    hosts = load_hosts()
-    for url in hosts:
-        try:
-            raw_resp = urlopen(url + '/gpustat')
-            gpustat = json.loads(raw_resp.read())
-            raw_resp.close()
-            if not gpustat or 'gpus' not in gpustat:
-                continue
-            if hosts[url] != url:
-                gpustat['hostname'] = hosts[url]
-            gpustats.append(gpustat)
-        except Exception as e:
-            print('Error: %s getting gpustat from %s' %
-                  (getattr(e, 'message', str(e)), url))
+    if HOST_NAME is not None:
+        hosts = load_hosts()
+        for url in hosts:
+            try:
+                raw_resp = urlopen(url + '/gpustat')
+                gpustat = json.loads(raw_resp.read())
+                raw_resp.close()
+                if not gpustat or 'gpus' not in gpustat:
+                    continue
+                if hosts[url] != url:
+                    gpustat['hostname'] = hosts[url]
+                gpustats.append(gpustat)
+            except Exception as e:
+                print('Error: %s getting gpustat from %s' %
+                    (getattr(e, 'message', str(e)), url))
 
-    try:
-        sorted_gpustats = sorted(gpustats, key=lambda g: g['hostname'])
-        if sorted_gpustats is not None:
-            return sorted_gpustats
-    except Exception as e:
-        print("Error: %s" % getattr(e, 'message', str(e)))
+        try:
+            sorted_gpustats = sorted(gpustats, key=lambda g: g['hostname'])
+            if sorted_gpustats is not None:
+                return sorted_gpustats
+        except Exception as e:
+            print("Error: %s" % getattr(e, 'message', str(e)))
     return gpustats
 
 
