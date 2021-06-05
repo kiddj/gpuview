@@ -26,10 +26,10 @@ EXCLUDE_SELF = False  # Do not report to `/gpustat` calls.
 
 
 @app.route('/')
-def index(user_passwd):
-    passwd = core.get_passwd()
-    if passwd is not None and passwd != user_passwd:
-        return None
+def index():
+    # passwd = core.get_passwd()
+    # if passwd is not None and passwd != user_passwd:
+    #     return None
     gpustats = core.all_gpustats()
     now = datetime.now().strftime('Updated at %Y-%m-%d %H-%M-%S')
     return template('index', gpustats=gpustats, update_time=now)
