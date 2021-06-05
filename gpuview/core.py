@@ -71,12 +71,10 @@ def my_gpustat():
                 gpu.pop("query_time", None)
 
             gpu['flag'] = 'bg-primary'
-            if gpu['utilization.gpu'] > 75:
+            if gpu['utilization.gpu'] > 80:
                 gpu['flag'] = 'bg-danger'
-            elif gpu['utilization.gpu'] > 50:
+            elif gpu['utilization.gpu'] > 0:
                 gpu['flag'] = 'bg-warning'
-            elif gpu['utilization.gpu'] > 25:
-                gpu['flag'] = 'bg-success'
 
         if delete_list:
             for gpu_id in delete_list:
